@@ -6,10 +6,16 @@ namespace BT_AUTO_2021_Programming
     {
         static void Main(string[] args)
         {
+            //Course01(args);
+            Course02(args);
+        }
+
+        static void Course01(string[] args)
+        {
             const int MAX_SIZE = 100;
             const double PI = 3.141592;
             const int MAX_NUMBER = 5;
-            
+
             Console.WriteLine("Hello World!");
             Console.WriteLine("Ana are mere");
             Console.WriteLine(6 + 2);
@@ -75,9 +81,9 @@ namespace BT_AUTO_2021_Programming
                 Console.WriteLine("Odd number!");
             }
 
-            if (number <=40 && number >=0)
+            if (number <= 40 && number >= 0)
             {
-                if (number <=20)
+                if (number <= 20)
                 {
                     Console.WriteLine("Student failed!");
                 }
@@ -128,7 +134,7 @@ namespace BT_AUTO_2021_Programming
                 Console.WriteLine("Sorry not a valid day!");
             }
 
-            switch(number)
+            switch (number)
             {
                 case 1:
                     {
@@ -198,7 +204,7 @@ namespace BT_AUTO_2021_Programming
                 Console.WriteLine("The argument is: {0}", argument);
             }
 
-           
+
             foreach (string yr in args)
             {
                 int febDays = 28;
@@ -229,6 +235,46 @@ namespace BT_AUTO_2021_Programming
                     Console.WriteLine("February has {0} days for year {1}", febDays, year);
                 }
             }
-            }
         }
+
+        static void Course02(string[] args)
+        {
+            Circle c1 = new Circle();
+            Circle c2; // c2 will be null !!!
+            c1.SetRadius(10);
+            /* double area = c1.GetArea();*/
+            /* Console.WriteLine(c1.GetArea());*/
+            c1.PrintCircle();
+            Circle c3 = new Circle();
+            c3.SetRadius(5);
+            /*Console.WriteLine(c3.GetArea());*/
+            c3.PrintCircle();
+            foreach (string p in args)
+            {
+                Circle c = new Circle();
+                c.SetRadius(Double.Parse(p));
+                Square s = new Square();
+                s.SetSide(Double.Parse(p));
+                Rectangle r = new Rectangle();
+                r.SetSize(Double.Parse(p), Double.Parse(p));
+                c.PrintCircle();
+                s.PrintSquare();
+                r.PrintRectangle();
+            }
+
+            Person p1 = new Person();
+            p1.SetName("Alex");
+            p1.SetSex('m');
+            p1.Eat();
+            p1.Run();
+            p1.Eat();
+            p1.PrintPerson();
+
+
+            Rectangle r1 = new Rectangle();
+            r1.SetSize(2, 3);
+            r1.PrintRectangle();
+        }
+
+    }
 }
