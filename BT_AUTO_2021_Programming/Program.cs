@@ -8,7 +8,8 @@ namespace BT_AUTO_2021_Programming
         {
             //Course01(args);
             //Course02(args);
-            Course03(args);
+            //Course03(args);
+            Course04();
         }
 
         static void Course01(string[] args)
@@ -287,7 +288,190 @@ namespace BT_AUTO_2021_Programming
             Random rnd = new Random();
             GuessNumber(rnd.Next(1,1000));
         }
-        
+
+        static void Course04()
+        {
+            DrawFullShape(5, 3);
+            Console.WriteLine();
+            DrawFullShape2(5, 3);
+            Console.WriteLine();
+            DrawShapeOutline(14, 22);
+            DrawShapeOutline2(14, 22);
+            Console.WriteLine();
+            DrawShapeCorners(10, 13);
+            Console.WriteLine();
+            DrawShapeCorners2(10, 13);
+
+            Circle c1 = new Circle(); // instantiate c1 with default (no params) constructor
+            Circle c2 = new Circle(10); // instantiate c2 with constructor having 1 double parameter
+            c1.PrintCircle();
+            c2.PrintCircle();
+
+            Person p1 = new Person();
+            Person p2 = new Person("Alex", 'm', new string[] { "Romanian" }, false, new DateTime());
+            p1.PrintPerson();
+            p2.PrintPerson();
+
+            Rectangle r1 = new Rectangle(2, 7);
+            r1.PrintRectangle();
+
+            Square s1 = new Square(6);
+            s1.PrintSquare();
+
+            StructExample se = new StructExample();
+            StructExample.MyStruct myStruct = new StructExample.MyStruct();
+            myStruct.Assign(10, "abc");
+            Console.WriteLine(myStruct.ComputeSum());
+
+            StructExample.Rectangle3d r2 = new StructExample.Rectangle3d();
+            r2.Assign(2, 5, 7);
+            Console.WriteLine(r2.GetVolume());
+        }
+
+        public static void DrawShapeOutline(int width, int height)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                for (int i = 0; i < width; i++) /// this will print a single line with * counting width
+                {
+                    if (j==0 || j==height-1)
+                    {
+                        Console.Write("*");
+                    }
+                    else
+                    {
+                        if (i ==0 || i ==width-1)
+                        {
+                            Console.Write("*");
+                        }
+                        else
+                        {
+                            Console.Write(" ");
+                        }
+                    }
+                }
+                Console.WriteLine();
+            }
+        }
+
+        public static void DrawShapeCorners(int width, int height)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                for (int i = 0; i < width; i++) 
+                {
+                    //if ((j == 0 && i == 0) || (j == 0 && i == width - 1) || (j == height - 1 && i == 0) || (j == height - 1 && i == width - 1))
+                    if (j == 0 || j == height - 1)
+                        {
+                            if (i == 0 || i == width - 1)
+                            {
+                                Console.Write("*");
+                            }
+                            else
+                        {
+                            Console.Write(" ");
+                        }
+                            
+                    }
+                    else
+                    {
+                        Console.Write(" ");
+                    }
+                }
+                Console.WriteLine();
+            }
+        }
+
+        public static void DrawFullShape(int width, int height)
+        {
+            for(int j = 0; j< height;j++) {
+                for (int i = 0; i < width; i++) /// this will print a single line with * counting width
+                {
+                    Console.Write("*");
+                }
+                Console.WriteLine();
+            }
+        }
+
+        public static void DrawFullShape2(int width, int height)
+        {
+            String s = "";
+            for (int i = 0; i < width; i++) /// this will print a single line with * counting width
+            {
+                s += "*";
+            }
+
+            for (int j = 0; j < height; j++)
+            {
+                
+                Console.WriteLine(s);
+            }
+        }
+
+        public static void DrawShapeOutline2(int width, int height)
+        {
+            String s = ""; // *******
+            String s1 = ""; // *     *
+            for (int i = 0; i < width; i++) /// this will print a single line with * counting width
+            {
+                s += "*";
+                if (i==0 || i==width-1)
+                {
+                    s1 += "*";
+
+                }
+                else
+                {
+                    s1 += " ";
+                }
+            }
+
+            for (int j = 0; j < height; j++)
+            {
+                if(j==0 || j==height-1)
+                {
+                    Console.WriteLine(s);
+                }
+                else
+                {
+                    Console.WriteLine(s1);
+                }
+                
+            }
+        }
+
+        public static void DrawShapeCorners2(int width, int height)
+        {
+            String s = ""; //         
+            String s1 = ""; // *     *
+            for (int i = 0; i < width; i++) /// this will print a single line with * counting width
+            {
+                s += " ";
+                if (i == 0 || i == width - 1)
+                {
+                    s1 += "*";
+
+                }
+                else
+                {
+                    s1 += " ";
+                }
+            }
+
+            for (int j = 0; j < height; j++)
+            {
+                if (j == 0 || j == height - 1)
+                {
+                    Console.WriteLine(s1);
+                }
+                else
+                {
+                    Console.WriteLine(s);
+                }
+
+            }
+        }
+
         static bool IsOddNumber(int number)
         {
             return number % 2 != 0;
