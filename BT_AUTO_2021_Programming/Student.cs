@@ -11,7 +11,7 @@ namespace BT_AUTO_2021_Programming
         bool hasDormRoom;
         string[] courses;
 
-        public Student(string currentStudyYear, bool hasScholarship, bool hasDormRoom, string name, char sex) 
+        public Student(string currentStudyYear, bool hasScholarship, bool hasDormRoom, string name, char sex)
         {
             this.currentStudyYear = currentStudyYear;
             this.hasScholarship = hasScholarship;
