@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BT_AUTO_2021_Programming
 {
-    class Square : Rectangle
+    sealed class Square : Rectangle
     {
         double side;
 
@@ -36,6 +36,11 @@ namespace BT_AUTO_2021_Programming
         public override string ToString()
         {
             return "This is a square with side " + side;
+        }
+
+        public override void Draw()
+        {
+            Console.WriteLine("Drawing a square!");
         }
 
     }
