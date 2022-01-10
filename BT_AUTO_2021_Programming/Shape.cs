@@ -4,10 +4,11 @@ using System.Text;
 
 namespace BT_AUTO_2021_Programming
 {
-    class Shape : AbstractShape
+    class Shape : AbstractShape, IDisposable
     {
 
         ConsoleColor color;
+        string test;
 
         protected void Test()
         {
@@ -44,5 +45,10 @@ namespace BT_AUTO_2021_Programming
             Console.WriteLine("Coloring a shape");
         }
 
+        public void Dispose()
+        {
+            Console.WriteLine("Dispoing object!");
+            test = "";
+        }
     }
 }
