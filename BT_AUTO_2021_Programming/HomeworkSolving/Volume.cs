@@ -32,7 +32,7 @@ namespace BT_AUTO_2021_Programming.HomeworkSolving
         }
         public static double ComputeVolume(float radius)
         {
-            return (((double)4 / (double)3) * Math.PI * ComputeVolume(Convert.ToDouble(radius)));
+            return ((4 / 3) * Math.PI * ComputeVolume(Convert.ToDouble(radius)));
         }
 
         public static double ComputeVolume(double lenght, double height, double weight)
