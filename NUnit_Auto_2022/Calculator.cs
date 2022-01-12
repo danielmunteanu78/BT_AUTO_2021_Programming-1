@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NUnit_Auto_2022
 {
-    class Calculator : ICalculator
+    public class Calculator : ICalculator
     {
         double a, b;
         char op;
