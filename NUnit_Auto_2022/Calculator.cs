@@ -16,6 +16,11 @@ namespace NUnit_Auto_2022
             this.op = op;
         }
 
+        public double Compute()
+        {
+            return Compute(a, op, b);
+        }
+
         public double Compute(double a, char op, double b)
         {
             switch(op)
