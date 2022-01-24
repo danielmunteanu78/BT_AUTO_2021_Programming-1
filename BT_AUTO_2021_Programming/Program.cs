@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BT_AUTO_2021_Programming.HomeworkSolving;
+using System;
 using System.Collections.Generic;
 
 namespace BT_AUTO_2021_Programming
@@ -22,13 +23,137 @@ namespace BT_AUTO_2021_Programming
             //Course06();
             //Course07();
             // Course08();
-            try
+            /*try
             {
                 Course09(args);
             }
            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+            }*/
+
+            BuildingHomeworkExample();
+
+        }
+
+
+        private static void BuildingHomeworkExample()
+        {
+            // Solving Building Homework 
+            
+            // Creating the first floor
+            List<Room> rooms = new List<Room>();
+            var workingSpace1 = new WorkingSpace(123.33, 50, "WS1FL1", 50, 60, 80);
+            
+            var appliances1 = new List<string>
+            {
+                "Microwave oven",
+                "Coffee machine",
+                "Sink",
+                "Autmated Dishwasher"
+            };
+            var kitchen1 = new Kitchen(21.22, 15, "KTC_TYP1", appliances1, 10);
+            
+            var depositBoxLis1 = new List<string>
+            {
+                "Cleaning products",
+                "Broom",
+                "Toilet paper supplies"
+            };
+            var deposit1 = new DepositRoom(10.76, 0, "DPST_TYPE1", depositBoxLis1);            
+            var meetingRoom1 = new MeetingRoom(25.67, 20, "MontBlanc", true, 15, 3);            
+            var meetingRoom2 = new MeetingRoom(15.67, 10, "Everest", false, 10, 2);
+
+            rooms.Add(kitchen1);
+            rooms.Add(meetingRoom2);
+            rooms.Add(workingSpace1);
+            rooms.Add(deposit1);
+            rooms.Add(meetingRoom1);
+            Floor fl1 = new Floor(rooms, 2, 1);
+
+            // Creating the secondFloor (resetting the room list also)
+            rooms = new List<Room>();
+            var workingSpace2 = new WorkingSpace(150.22, 55, "WS1FL2", 55, 60, 85);
+            var kitchen2 = new Kitchen(18.57, 10, "KTC_TYP2", appliances1, 10);
+            var meetingRoom3 = new MeetingRoom(22.56, 18, "Aconcagua", true, 15, 3);
+            var meetingRoom4 = new MeetingRoom(10.11, 5, "Mauna Loa", false, 5, 1);
+            var meetingRoom5 = new MeetingRoom(10.22, 5, "Mauna Kea", false, 5, 1);
+
+            rooms.Add(workingSpace2);
+            rooms.Add(kitchen2);
+            rooms.Add(meetingRoom3);
+            rooms.Add(meetingRoom4);
+            rooms.Add(meetingRoom5);
+
+            Floor fl2 = new Floor(rooms, 2, 2);
+
+            // Creating the 3rd (resetting the room list also)
+            rooms = new List<Room>();
+            var workingSpace3 = new WorkingSpace(177.22, 70, "WS1FL3", 75, 80, 90);
+            var kitchen3 = new Kitchen(25.66, 30, "KTC_TYP3", appliances1, 40);
+            var meetingRoom6 = new MeetingRoom(25.78, 30, "Moldoveanu", true, 15, 4);
+            var meetingRoom7 = new MeetingRoom(22.97, 25, "Negoiu", true, 5, 3);
+            var meetingRoom8 = new MeetingRoom(16.63, 8, "Ceahlau", false, 8, 2);
+
+            rooms.Add(workingSpace3);
+            rooms.Add(kitchen3);
+            rooms.Add(meetingRoom6);
+            rooms.Add(meetingRoom7);
+            rooms.Add(meetingRoom8);
+
+            Floor fl3 = new Floor(rooms, 2, 3);
+
+            // Creating the 4th (resetting the room list also)
+            rooms = new List<Room>();
+
+            var workingSpace4 = new WorkingSpace(50.56, 40, "WS1FL4", 40, 40, 40);
+            var kitchen4 = new Kitchen(15.66, 12, "KTC_TYP4", appliances1, 8);
+            var meetingRoom9 = new MeetingRoom(25.78, 28, "Cuzco", true, 25, 4);
+            var meetingRoom10 = new MeetingRoom(25.97, 28, "Sierra Nevada", true, 25, 4);
+            var meetingRoom11 = new MeetingRoom(25.63, 28, "Chimborazo", false, 25, 4);
+
+            rooms.Add(workingSpace4);
+            rooms.Add(kitchen4);
+            rooms.Add(meetingRoom9);
+            rooms.Add(meetingRoom10);
+            rooms.Add(meetingRoom11);
+
+            Floor fl4 = new Floor(rooms, 2, 4);
+
+            // Creating the 5th (resetting the room list also)
+            rooms = new List<Room>();
+
+            var workingSpace5 = new WorkingSpace(77.86, 35, "WS1FL5", 35, 35, 35);
+            var kitchen5 = new Kitchen(25.66, 30, "KTC_TYP3", appliances1, 40);
+            var meetingRoom12 = new MeetingRoom(20.12, 15, "McKinley", true, 15, 3);
+            var meetingRoom13 = new MeetingRoom(20.55, 15, "Kilimanjaro", true, 15, 3);
+            var meetingRoom14 = new MeetingRoom(20.78, 15, "Elbrus", true, 15, 3);
+
+            rooms.Add(workingSpace5);
+            rooms.Add(kitchen5);
+            rooms.Add(meetingRoom12);
+            rooms.Add(meetingRoom13);
+            rooms.Add(meetingRoom14);
+
+            Floor fl5 = new Floor(rooms, 2, 5);
+
+            List<Floor> floors = new List<Floor>
+            {
+                fl1,
+                fl2,
+                fl3,
+                fl4,
+                fl5
+            };
+
+            Building myCorporateBuilding = new Building(floors, "Alex's Company");
+            try
+            {
+                Building.PrintBuilding(myCorporateBuilding);
+            }
+            catch (CapacityExceededException cee) 
+            {
+                Console.WriteLine(cee.Message);
             }
 
         }
