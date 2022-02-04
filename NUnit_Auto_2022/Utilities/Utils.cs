@@ -62,5 +62,15 @@ namespace NUnit_Auto_2022
             }
         }
 
+        public static Dictionary<string,string> ReadConfig(string configFilePath)
+        {
+            var configData = new Dictionary<string, string>();
+            foreach(var line in File.ReadAllLines(configFilePath))
+            {
+                string[] values = line.Split('=');
+                configData.Add(values[0].Trim(), values[1].Trim());
+            }
+            return configData;
+        }
     }
 }
