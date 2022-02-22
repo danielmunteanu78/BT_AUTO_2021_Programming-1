@@ -96,12 +96,10 @@ namespace NUnit_Auto_2022.Tests
 
         private static IEnumerable<TestCaseData> GetCredentialsDb()
         {
-            // Read the connection string (server=;user=;password=;port=;database=) from json in conDetails variable
-            DataModels.DbConnString connString = Utils.JsonRead<DataModels.DbConnString>("appsettings.json");
-            String conDetails = connString.ConnectionStrings.DefaultConnection;
+
             // connecting to DB 
-            using (MySqlConnection con = new MySqlConnection(conDetails))
-            {
+            using (MySqlConnection con = new MySqlConnection(FrameworkConstants.decryptedCon))
+            {                
                 //opening connection
                 con.Open();
                 // prepare to run the query in the DB
@@ -122,13 +120,12 @@ namespace NUnit_Auto_2022.Tests
 
         private static IEnumerable<TestCaseData> GetCredentialsDbEf()
         {
-            // Read the connection string (server=;user=;password=;port=;database=) from json in conDetails variable
-            DataModels.DbConnString connString = Utils.JsonRead<DataModels.DbConnString>("appsettings.json");
-            String conDetails = connString.ConnectionStrings.DefaultConnection;
+/*            DataModels.DbConnString connString = Utils.JsonRead<DataModels.DbConnString>("appsettings.json");
+            string conDetails = Utils.Decrypt(connString.ConnectionStrings.DefaultConnection, "btauto2022");*/
             //Map the DB table to EF model
-            using(var context = new Other.CredentialsDbContext(conDetails))
+            using (var context = new Other.CredentialsDbContext(FrameworkConstants.decryptedCon))
             {
-                var credentials = context.credentialsag;
+                var credentials = context.credentialsAG;
                 foreach( var cred in credentials)
                 {
                     yield return new TestCaseData(cred.Username, cred.Password);
@@ -137,7 +134,7 @@ namespace NUnit_Auto_2022.Tests
         }
 
         // Test auth with Page Object model
-        [Test, TestCaseSource("GetCredentialsDbEf")]
+        [Test, TestCaseSource("GetCredentialsDb")]
         public void BasicAuth(string username, string password)
         {
             driver.Navigate().GoToUrl(url + "login");
@@ -146,6 +143,7 @@ namespace NUnit_Auto_2022.Tests
             PageModels.POM.LoginPage lp = new PageModels.POM.LoginPage(driver);
             Assert.AreEqual("Authentication", lp.CheckPage());
             lp.Login(username, password);
+            
         }
 
         private static string[] GetUsername = new string[]

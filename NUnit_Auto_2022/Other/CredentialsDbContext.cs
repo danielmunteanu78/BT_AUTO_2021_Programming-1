@@ -7,7 +7,7 @@ namespace NUnit_Auto_2022.Other
 {
     class CredentialsDbContext : DbContext
     {
-        public DbSet<DataModels.EFModels.CredentialsAG> credentialsag { get; set; }
+        public DbSet<DataModels.EFModels.CredentialsAG> credentialsAG { get; set; }
         private string connectionString;
 
         // Use base constructor with options
