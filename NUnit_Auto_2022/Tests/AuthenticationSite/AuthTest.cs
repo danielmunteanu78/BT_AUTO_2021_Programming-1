@@ -14,6 +14,7 @@ using MySql.Data.MySqlClient;
 
 namespace NUnit_Auto_2022.Tests
 {
+    //[Parallelizable(ParallelScope.Children)]
     class AuthTest : BaseTest
     {
 
@@ -134,7 +135,9 @@ namespace NUnit_Auto_2022.Tests
         }
 
         // Test auth with Page Object model
-        [Test, TestCaseSource("GetCredentialsDb")]
+        [Category("AuthWithDb")]
+        [Category("Smoke")]
+        [Test, TestCaseSource("GetCredentialsDb"), Order(1)]
         public void BasicAuth(string username, string password)
         {
             driver.Navigate().GoToUrl(url + "login");
@@ -157,7 +160,9 @@ namespace NUnit_Auto_2022.Tests
         };
 
         // Test auth with Page factory
-        [Test]
+        [Category("AuthPageFactory")]
+        [Test, Order(2), Category("Smoke")]
+        //[Parallelizable(ParallelScope.Self)]
         public void BasicAuthPf([ValueSource("GetUsername")] string username, [ValueSource("GetPassword")] string password)
         {
             driver.Navigate().GoToUrl(url + "login");

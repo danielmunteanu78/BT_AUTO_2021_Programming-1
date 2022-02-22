@@ -32,6 +32,7 @@ namespace NUnit_Auto_2022.Utilities
                         {
                             options.AddArgument("ignore-certificate-errors");
                         }
+                        options.AddArgument("no-sandbox");
                         // Proxy definition
                         var proxy = new Proxy
                         {
