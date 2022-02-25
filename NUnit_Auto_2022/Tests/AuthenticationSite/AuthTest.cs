@@ -140,13 +140,14 @@ namespace NUnit_Auto_2022.Tests
         [Test, TestCaseSource("GetCredentialsDb"), Order(1)]
         public void BasicAuth(string username, string password)
         {
-            driver.Navigate().GoToUrl(url + "login");
+            _driver.Navigate().GoToUrl(url + "login");
             // This is beacuse we have 2 classes named LoginPage one on POM other on PageFactory
             // In real life framework you will have just one type of desigm pattern (POM/PF)
-            PageModels.POM.LoginPage lp = new PageModels.POM.LoginPage(driver);
+            PageModels.POM.LoginPage lp = new PageModels.POM.LoginPage(_driver);
             Assert.AreEqual("Authentication", lp.CheckPage());
             lp.Login(username, password);
-            
+            testName = TestContext.CurrentContext.Test.Name;
+            _test = _extent.CreateTest(testName);
         }
 
         private static string[] GetUsername = new string[]
@@ -165,10 +166,12 @@ namespace NUnit_Auto_2022.Tests
         //[Parallelizable(ParallelScope.Self)]
         public void BasicAuthPf([ValueSource("GetUsername")] string username, [ValueSource("GetPassword")] string password)
         {
-            driver.Navigate().GoToUrl(url + "login");
-            PageModels.PageFactory.LoginPage lp = new PageModels.PageFactory.LoginPage(driver);
+            _driver.Navigate().GoToUrl(url + "login");
+            PageModels.PageFactory.LoginPage lp = new PageModels.PageFactory.LoginPage(_driver);
             Assert.AreEqual("Authentication", lp.CheckPage());
             lp.Login(username, password);
+            testName = TestContext.CurrentContext.Test.Name;
+            _test = _extent.CreateTest(testName);
         }
 
 
