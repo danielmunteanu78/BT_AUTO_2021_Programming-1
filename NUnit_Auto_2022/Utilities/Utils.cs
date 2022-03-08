@@ -251,5 +251,16 @@ namespace NUnit_Auto_2022
             }
         }
 
+        public static string ConvertDictionaryToQuery(Dictionary<string, string> queryParams)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach(string key in queryParams.Keys)
+            {
+                sb.Append(String.Format("&{0}={1}", key, queryParams[key]));
+            }
+            return sb.ToString();
+
+        }
+
     }
 }
