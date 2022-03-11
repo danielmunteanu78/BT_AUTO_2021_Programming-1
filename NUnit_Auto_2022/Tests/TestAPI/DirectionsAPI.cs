@@ -1,4 +1,7 @@
-﻿using NUnit.Framework;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NUnit.Framework;
+using NUnit_Auto_2022.DataModels.APIModels;
 using NUnit_Auto_2022.Utilities;
 using RestSharp;
 using System;
@@ -6,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
 
 namespace NUnit_Auto_2022.Tests.TestAPI
 {
@@ -13,10 +17,6 @@ namespace NUnit_Auto_2022.Tests.TestAPI
     {
         RestClient client = new RestClient();
         
-        string to = "Mangalia";
-        string from = "Bucharest";
-        //string url = "http://www.mapquestapi.com/directions/v2/route?key=F77jGMkbkE9nGW2K4OGSMfisLOtmVC78&to=Mangalia&from=Bucharest";
-
         private string GetUrl(string queryParams)
         {
             return String.Format("{0}{1}", FrameworkConstants.GetApiUrl(), queryParams);
@@ -24,31 +24,107 @@ namespace NUnit_Auto_2022.Tests.TestAPI
 
         private static IEnumerable<TestCaseData> GetRequestData()
         {
-            string path = "TestData\\TestDataAPI\\directionsData.csv";
-            var lines = File.ReadAllLines(path).Select(a => a.Split(','));
-            string[] header = lines.ElementAt(0).ToArray();
-            for (int i = 1; i < lines.Count(); i++)
+            var paramsList = Utils.ConvertCsvToDictionary("TestData\\TestDataAPI\\directionsData.csv");
+            var resultsList = Utils.ConvertCsvToDictionary("TestData\\TestDataAPI\\directionsValidations.csv");
+                      
+
+            if (paramsList.Count == resultsList.Count)
             {
-                var currentValues = lines.ElementAt(i).ToArray();
-                Dictionary<string, string> queryParams = new Dictionary<string, string>();
-                for (int j = 0; j < currentValues.Count(); j++)
+                for (int i = 0; i < paramsList.Count; i++)
                 {
-                    queryParams.Add(header[j], currentValues[j]);
+                    yield return new TestCaseData(paramsList[i], resultsList[i]);
                 }
-                yield return new TestCaseData(queryParams);
+            }
+            else
+            {
+                Console.WriteLine("There is a test data / test validation count consistency");
             }
         }
 
+        private MapQuestRequestModel GetPostData(Dictionary<string,string> kvp)
+        {
+            MapQuestOptionsModel mapOptions = new MapQuestOptionsModel
+            {
+                unit = kvp["unit"],
+                avoids = new List<string>(),
+                avoidTimedConditions = false,
+                doReverseGeocode = true,
+                drivingStyle = 2,
+                enhancedNarrative = false,
+                generalize = 0,
+                highwayEfficiency = 21.0f,
+                locale = "en_US",
+                routeType = "fastest",
+                shapeFormat = "raw",
+                timeType = 1
+            };
+
+            MapQuestRequestModel request = new MapQuestRequestModel
+            {
+                locations = new List<string>
+                {
+                    kvp["to"],
+                    kvp["from"]
+                },
+                options = mapOptions
+            };
+            return request;
+        }
+        
+
+        // POST Request to server
         [Test, TestCaseSource("GetRequestData")]
-        public void Test01(Dictionary<string, string> queryParams)
+        public void Test02(Dictionary<string, string> queryParams, Dictionary<string, string> results)
+        {
+            Dictionary<string, string> postQueryParams = new Dictionary<string, string>();
+            postQueryParams.Add("outFormat", queryParams["outFormat"]);
+            string url = GetUrl(Utils.ConvertDictionaryToQuery(postQueryParams));
+            string jsonBody = System.Text.Json.JsonSerializer.Serialize(GetPostData(queryParams));
+            var request = new RestRequest(url, Method.Post);
+            request.AddParameter("application/json;charset=utf-8",jsonBody, ParameterType.RequestBody);
+            request.RequestFormat = DataFormat.Json;
+            var response = client.PostAsync(request);
+            //Console.WriteLine(response.Result.Content);
+            // Same validations / assertion code as for the Test01 (Get method)
+        }
+
+        // Get Request to Server
+        [Test, TestCaseSource("GetRequestData")]
+        public void Test01(Dictionary<string, string> queryParams, Dictionary<string, string> results)
         {
             string url = GetUrl(Utils.ConvertDictionaryToQuery(queryParams));
             var request = new RestRequest(url, Method.Get);
             var response = client.GetAsync(request);
             var responseContent = response.Result.Content;
-            //Console.WriteLine(responseContent);
-            //Console.WriteLine(Utils.Decrypt(FrameworkConstants.apikeyEncrypt+"==","btauto2022"));
             Console.WriteLine(url);
+            string outFormat = queryParams["outFormat"];
+            switch(outFormat)
+            {
+                case "json":
+                    {
+                        var json = JObject.Parse(responseContent);
+                        Assert.AreEqual(results["distance"], json.SelectToken("$..route.distance").ToString().Replace(",","."));
+                        Assert.AreEqual(results["formattedTime"], json.SelectToken("$..route.formattedTime").ToString().Replace(",", "."));
+                        break;
+                    }
+                case "xml":
+                    {
+                        XmlDocument doc = new XmlDocument();
+                        doc.LoadXml(responseContent);
+                        XmlNode distance = doc.SelectSingleNode("/response/route/distance");
+                        XmlNode formattedTime = doc.SelectSingleNode("/response/route/formattedTime");
+                        Assert.AreEqual(results["distance"], distance.InnerText);
+                        Assert.AreEqual(results["formattedTime"], formattedTime.InnerText);
+                        break;
+                    }
+                default:
+                    {
+                        Console.WriteLine("Outformat should be xml or json");
+                        break;
+                    }
+            }
+       
+            
         }
     }
 }
